@@ -191,6 +191,7 @@ func (o *Checker) readAcls() (int, error) {
 	linesCount := 0
 	currentUser := ""
 	userExists := false
+	userSeen := false
 
 	file, err := os.Open(o.aclPath)
 	if err != nil {
@@ -217,6 +218,9 @@ func (o *Checker) readAcls() (int, error) {
 		prefix := lineArr[0]
 
 		if prefix == "user" {
+			// Flag that a user has been seen so no topic coming after is addigned to general ones.
+			userSeen = true
+
 			// Since there may be more than one consecutive space in the username, we have to remove the prefix and trim to get the username.
 			username, err := removeAndTrim(prefix, line, index)
 			if err != nil {
@@ -300,7 +304,10 @@ func (o *Checker) readAcls() (int, error) {
 					}
 					fUser.aclRecords = append(fUser.aclRecords, aclRecord)
 				} else {
-					o.aclRecords = append(o.aclRecords, aclRecord)
+					// Only append to general topics when no user has been processed.
+					if !userSeen {
+						o.aclRecords = append(o.aclRecords, aclRecord)
+					}
 				}
 			} else {
 				o.aclRecords = append(o.aclRecords, aclRecord)

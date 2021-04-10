@@ -43,4 +43,25 @@ func TestFilesBackend(t *testing.T) {
 		_, err = NewFiles(authOpts, logLevel, hasher)
 		So(err, ShouldBeNil)
 	})
+
+	Convey("When Files is only registered to check acls and there are no rules for the tested user", t, func() {
+		aclPath, err := filepath.Abs("../test-files/acls-only")
+		So(err, ShouldBeNil)
+
+		authOpts["backends"] = "files"
+		authOpts["files_register"] = "acl"
+		authOpts["files_acl_path"] = aclPath
+		delete(authOpts, "files_password_path")
+
+		f, err := NewFiles(authOpts, logLevel, hasher)
+		So(err, ShouldBeNil)
+
+		granted, err := f.CheckAcl("some-user", "any/topic", "client-id", 1)
+		So(err, ShouldBeNil)
+		So(granted, ShouldBeTrue)
+
+		granted, err = f.CheckAcl("test1", "any/topic", "client-id", 1)
+		So(err, ShouldBeNil)
+		So(granted, ShouldBeFalse)
+	})
 }

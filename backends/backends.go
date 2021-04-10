@@ -257,8 +257,6 @@ func (b *Backends) setCheckers(authOpts map[string]string) error {
 		}
 	}
 
-	fmt.Printf("user checkers: %#v\nacl checkers: %#v\n", b.userCheckers, b.aclCheckers)
-
 	if len(b.userCheckers) == 0 && len(b.aclCheckers) == 0 {
 		return errors.New("no backends registered")
 	}

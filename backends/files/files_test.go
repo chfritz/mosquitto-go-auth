@@ -239,7 +239,6 @@ func TestFiles(t *testing.T) {
 		})
 
 		Convey("User 3 should be able to read any test/X but not other/... nor test/denied\n\n", func() {
-			fmt.Printf("\n\nUser 3 acls: %#v", files.users[user3].aclRecords)
 			tt1, err1 := files.CheckAcl(user3, testTopic1, clientID, 1)
 			tt2, err2 := files.CheckAcl(user3, testTopic2, clientID, 1)
 			tt3, err3 := files.CheckAcl(user3, testTopic3, clientID, 1)
@@ -340,8 +339,6 @@ func TestFiles(t *testing.T) {
 
 		backendsOpt := "files"
 
-		fmt.Printf("\npw path: %s   /   acl path: %s\n", pwPath, aclPath)
-
 		files, err := NewChecker(backendsOpt, pwPath, aclPath, log.DebugLevel, hasher)
 		So(err, ShouldBeNil)
 
@@ -349,7 +346,6 @@ func TestFiles(t *testing.T) {
 		So(ok, ShouldBeTrue)
 
 		record := user.aclRecords[0]
-		fmt.Printf("record: %#v\n", record)
 		So(record.acc, ShouldEqual, MOSQ_ACL_READ)
 		So(record.topic, ShouldEqual, "test/#")
 
