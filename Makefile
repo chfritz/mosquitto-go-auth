@@ -1,4 +1,4 @@
-CFLAGS := -I/usr/local/include -fPIC
+CFLAGS := -I/usr/include -fPIC
 LDFLAGS := -shared
 
 UNAME_S := $(shell uname -s)
