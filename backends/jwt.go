@@ -37,7 +37,6 @@ type Claims struct {
 
 const (
 	remoteMode = "remote"
-	localMode  = "local"
 	jsMode     = "js"
 	filesMode  = "files"
 )
@@ -78,9 +77,6 @@ func NewJWT(authOpts map[string]string, logLevel log.Level, hasher hashing.HashC
 	case jsMode:
 		jwt.mode = jsMode
 		checker, err = NewJsJWTChecker(authOpts, options)
-	case localMode:
-		jwt.mode = localMode
-		checker, err = NewLocalJWTChecker(authOpts, logLevel, hasher, options)
 	case remoteMode:
 		jwt.mode = remoteMode
 		checker, err = NewRemoteJWTChecker(authOpts, options, version)
